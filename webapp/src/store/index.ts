@@ -15,7 +15,8 @@ export enum MutationTypes {
 }
 
 export enum ActionTypes {
-  INC_COUNTER = 'SET_COUNTER'
+  INC_COUNTER = 'SET_COUNTER',
+  HELLO = 'HELLO'
 }
 
 export type Mutations<S = State> = {
@@ -40,11 +41,17 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: number
   ): void
+  [ ActionTypes.HELLO ](
+    { commit }: AugmentedActionContext,
+    payload: number): void
 }
 
 export const actions: ActionTree<State, State> & Actions = {
   [ ActionTypes.INC_COUNTER ]({ commit }, payload: number) {
     commit(MutationTypes.INC_COUNTER, payload)
+  },
+  async [ ActionTypes.HELLO ]({ commit }, payload: number) {
+    console.log('Hello')
   }
 }
 

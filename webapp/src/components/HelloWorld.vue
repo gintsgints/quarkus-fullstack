@@ -4,12 +4,13 @@
     <button @click="inc">Press me</button>
     <h5>Counter: {{state.counter}}</h5>
     <h5>Double counter: {{doubleCounter}}</h5>
+    <button @click="hello">Call Hello API</button>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted } from 'vue'
-import { useStore, MutationTypes } from '../store'
+import { useStore, MutationTypes, ActionTypes } from '../store'
 
 export default defineComponent({
   setup() {
@@ -21,6 +22,9 @@ export default defineComponent({
     const state = ref(store.state)
     const inc = () => {
       store.commit(MutationTypes.INC_COUNTER, 1)
+    }
+    const hello = () => {
+      store.dispatch(ActionTypes.HELLO, 1)
     }
 
     const doubleCounter = computed(() => store.getters.doubleCounter)
