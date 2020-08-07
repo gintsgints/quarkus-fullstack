@@ -1,8 +1,9 @@
 # quarkus-fullstack project
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+This project uses Quarkus, the Supersonic Subatomic Java Framework & VUE 3 for frontend.
 
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+More information on VUE is on website: https://github.com/vuejs/vue-next .
 
 ## Running the application in dev mode
 
