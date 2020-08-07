@@ -5,6 +5,7 @@
     <h5>Counter: {{state.counter}}</h5>
     <h5>Double counter: {{doubleCounter}}</h5>
     <button @click="hello">Call Hello API</button>
+    <h5>API Message: {{state.msg}}</h5>
   </div>
 </template>
 
@@ -24,7 +25,7 @@ export default defineComponent({
       store.commit(MutationTypes.INC_COUNTER, 1)
     }
     const hello = () => {
-      store.dispatch(ActionTypes.HELLO, 1)
+      store.dispatch(ActionTypes.HELLO, {})
     }
 
     const doubleCounter = computed(() => store.getters.doubleCounter)
@@ -32,6 +33,7 @@ export default defineComponent({
     return {
       state,
       inc,
+      hello,
       doubleCounter
     }
   },

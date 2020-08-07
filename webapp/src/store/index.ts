@@ -4,14 +4,21 @@ import {
   Store as VuexStore
 } from 'vuex'
 
-export type State = { counter: number }
+export type State = {
+  counter: number
+  msg: string
+}
 
 // declare state
-const state: State = { counter: 0 }
+const state: State = {
+  counter: 0,
+  msg: ''
+}
 
 // Mutations & actions enums
 export enum MutationTypes {
-  INC_COUNTER = 'SET_COUNTER'
+  INC_COUNTER = 'SET_COUNTER',
+  SET_HELLO = 'SET_HELLO'
 }
 
 export enum ActionTypes {
@@ -21,11 +28,15 @@ export enum ActionTypes {
 
 export type Mutations<S = State> = {
   [ MutationTypes.INC_COUNTER ](state: S, payload: number): void
+  [ MutationTypes.SET_HELLO ](state: S, payload: string): void
 }
 
 const mutations: MutationTree<State> & Mutations = {
   [ MutationTypes.INC_COUNTER ](state: State, payload: number) {
     state.counter += payload
+  },
+  [ MutationTypes.SET_HELLO ](state: State, payload: string) {
+    state.msg = payload
   }
 }
 
@@ -43,15 +54,18 @@ export interface Actions {
   ): void
   [ ActionTypes.HELLO ](
     { commit }: AugmentedActionContext,
-    payload: number): void
+    // eslint-disable-next-line
+    payload: any): void
 }
 
 export const actions: ActionTree<State, State> & Actions = {
   [ ActionTypes.INC_COUNTER ]({ commit }, payload: number) {
     commit(MutationTypes.INC_COUNTER, payload)
   },
-  async [ ActionTypes.HELLO ]({ commit }, payload: number) {
-    console.log('Hello')
+  async [ ActionTypes.HELLO ]({ commit }) {
+    const response = await fetch('/api/hello')
+    const respobject = await response.json()
+    commit(MutationTypes.SET_HELLO, respobject.msg)
   }
 }
 
