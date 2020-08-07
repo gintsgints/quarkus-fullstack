@@ -7,9 +7,18 @@ More information on VUE is on website: https://github.com/vuejs/vue-next .
 
 ## Running the application in dev mode
 
-You can run your application in dev mode that enables live coding using:
+You can run your application in dev mode that enables live coding using
+for backend:
+
 ```
 ./mvnw quarkus:dev
+```
+
+And then in another terminal start frontend:
+
+```
+cd webapp
+npm run serve
 ```
 
 ## Packaging and running the application
