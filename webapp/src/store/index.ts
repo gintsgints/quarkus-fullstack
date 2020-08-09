@@ -4,31 +4,45 @@ import {
   Store as VuexStore
 } from 'vuex'
 
+export type Task = {
+  name: string
+  due: Date
+  done: boolean
+}
+
 export type State = {
   counter: number
   msg: string
+  tasks: Array<Task>
 }
 
 // declare state
 const state: State = {
   counter: 0,
-  msg: ''
+  msg: '',
+  tasks: []
 }
 
 // Mutations & actions enums
 export enum MutationTypes {
   INC_COUNTER = 'SET_COUNTER',
+  SET_TASKS = 'SET_TASKS',
+  ADD_TASK = 'ADD_TASK',
   SET_HELLO = 'SET_HELLO'
 }
 
 export enum ActionTypes {
   INC_COUNTER = 'SET_COUNTER',
+  GET_TASKS = 'GET_TASKS',
+  ADD_TASK = 'ADD_TASK',
   HELLO = 'HELLO'
 }
 
 export type Mutations<S = State> = {
   [ MutationTypes.INC_COUNTER ](state: S, payload: number): void
   [ MutationTypes.SET_HELLO ](state: S, payload: string): void
+  [ MutationTypes.SET_TASKS ](state: S, payload: Array<Task>): void
+  [ MutationTypes.ADD_TASK ](state: S, payload: Task): void
 }
 
 const mutations: MutationTree<State> & Mutations = {
@@ -37,6 +51,12 @@ const mutations: MutationTree<State> & Mutations = {
   },
   [ MutationTypes.SET_HELLO ](state: State, payload: string) {
     state.msg = payload
+  },
+  [ MutationTypes.SET_TASKS ](state: State, payload: Array<Task>) {
+    state.tasks = payload
+  },
+  [ MutationTypes.ADD_TASK ](state: State, payload: Task) {
+    state.tasks.push(payload)
   }
 }
 
@@ -56,6 +76,14 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     // eslint-disable-next-line
     payload: any): void
+  [ ActionTypes.GET_TASKS ](
+    { commit }: AugmentedActionContext,
+    // eslint-disable-next-line
+    payload: any): void
+  [ ActionTypes.ADD_TASK ](
+    { commit }: AugmentedActionContext,
+    // eslint-disable-next-line
+    payload: any): void
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -66,6 +94,20 @@ export const actions: ActionTree<State, State> & Actions = {
     const response = await fetch('/api/hello')
     const respobject = await response.json()
     commit(MutationTypes.SET_HELLO, respobject.msg)
+  },
+  async [ ActionTypes.GET_TASKS ]({ commit }) {
+    const response = await fetch('/api/task')
+    const respobject = await response.json()
+    commit(MutationTypes.SET_TASKS, respobject)
+  },
+  async [ ActionTypes.ADD_TASK ]({ commit }, payload: Task) {
+    const response = await fetch('/api/task', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    const respobject = await response.json()
+    commit(MutationTypes.ADD_TASK, respobject)
   }
 }
 
