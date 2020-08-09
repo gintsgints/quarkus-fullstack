@@ -3,7 +3,10 @@
     <h1>{{ msg }}</h1>
     <input v-model="taskname" type="text" />
     <button @click="addTask">Add task</button>
-    <div v-for="task in state.tasks" v-bind:key="task.id">{{task.name}}</div>
+    <div v-for="task in state.tasks" v-bind:key="task.id">
+      <input v-model="task.done" type="checkbox" />
+      {{task.name}}
+    </div>
     <h5>Counter: {{state.counter}}</h5>
     <h5>Double counter: {{doubleCounter}}</h5>
     <button @click="hello">Call Hello API</button>
