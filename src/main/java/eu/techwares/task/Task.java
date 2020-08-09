@@ -13,7 +13,12 @@ public class Task extends PanacheEntity {
 	public Boolean done;
 
 	public static List<Task> findTasks(String name) {
-		return find("name like ?1", "%" + name + "%").list();
+		if (name == null) {
+			return findAll().list();
+		}
+		else {
+			return find("name like ?1", "%" + name + "%").list();
+		}
 	}
 
 	public static void createTask(Task task) {
