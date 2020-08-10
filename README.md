@@ -7,16 +7,29 @@ More information on VUE is on website: https://github.com/vuejs/vue-next .
 
 ## Running the application in dev mode
 
-You can run your application in dev mode that enables live coding using
-for backend:
+To start development you need Postgress running. You can start it using docker:
+
+```bash
+docker-compose up -d db
+```
+
+VUE build included thanks to - https://quarkify.net/build-run-and-deploy-vuejs-app-with-quarkus/
+
+When develop, you start your app by issuing:
 
 ```
-./mvnw quarkus:dev
+./mvnw exec:exec@npm-watch quarkus:dev
 ```
 
-And then in another terminal start frontend:
+you can also start project as two separate backend:
 
+```bash
+./mnw quarkus:dev
 ```
+
+and frontend in separate console:
+
+```bash
 cd webapp
 npm run serve
 ```
@@ -38,3 +51,12 @@ Or, if you don't have GraalVM installed, you can run the native executable build
 You can then execute your native executable with: `./target/quarkus-fullstack-1.0.0-SNAPSHOT-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/building-native-image.
+
+## Creating docker image
+
+Docker image could be build by using:
+
+```bash
+./mvnw clean package
+docker build -f src/main/docker/Dockerfile.jvm -t quarkus-fullstack .
+```

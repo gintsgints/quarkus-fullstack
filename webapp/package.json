@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "watch": "vue-cli-service build --mode=development --watch --dest ../src/main/resources/META-INF/resources/",
+    "prod": "vue-cli-service build --dest ../src/main/resources/META-INF/resources/"
   },
   "dependencies": {
     "core-js": "^3.6.5",

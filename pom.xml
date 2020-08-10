@@ -110,34 +110,63 @@
           </systemPropertyVariables>
         </configuration>
       </plugin>
-      <!-- Used to run the vue build -->
       <plugin>
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
-        <version>${version.frontend-maven-plugin}</version>
+        <version>1.6</version>
         <configuration>
-          <workingDirectory>webapp</workingDirectory>
+          <workingDirectory>${project.basedir}/webapp</workingDirectory>
+          <installDirectory>target</installDirectory>
         </configuration>
-      </plugin>
-      <!-- Copy the built webapp to the directory used by Quarkus -->
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>${version.resources-plugin}</version>
         <executions>
           <execution>
-            <id>copy-resources</id>
-            <phase>process-resources</phase>
+            <id>install node and npm</id>
             <goals>
-              <goal>copy-resources</goal>
+              <goal>install-node-and-npm</goal>
             </goals>
             <configuration>
-              <outputDirectory>${basedir}/target/classes/META-INF/resources/</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>webapp/dist</directory>
-                  <filtering>false</filtering>
-                </resource>
-              </resources>
+              <nodeVersion>v12.16.3</nodeVersion>
+              <npmVersion>6.14.4</npmVersion>
+            </configuration>
+          </execution>
+          <execution>
+            <id>npm install</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>install</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>npm run build</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <arguments>run prod</arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>npm-watch</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>npm</executable>
+              <async>true</async>
+              <arguments>
+                <argument>run</argument>
+                <argument>watch</argument>
+              </arguments>
+              <workingDirectory>${basedir}/webapp</workingDirectory>
             </configuration>
           </execution>
         </executions>
@@ -178,87 +207,6 @@
       <properties>
         <quarkus.package.type>native</quarkus.package.type>
       </properties>
-    </profile>
-    <profile>
-      <!--
-        Installs node and yarn in the webapp/node and webapp/node_modules folders respectively.
-        Run 'mvn package -Dui.deps':
-          * the first time you have checked out the source.
-          * whenever the dependencies have been changed in package.json (delete the webapp/node_modules folder first!)
-      -->
-      <id>Install node and yarn</id>
-      <activation>
-        <property>
-          <name>ui.deps</name>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>com.github.eirslett</groupId>
-            <artifactId>frontend-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <!--
-                  Install node and yarn for the plugin to have a copy.
-                -->
-                <id>install node and yarn</id>
-                <goals>
-                  <goal>install-node-and-yarn</goal>
-                </goals>
-                <configuration>
-                  <!-- Make sure these match the version you installed on your system -->
-                  <nodeVersion>v12.17.0</nodeVersion>
-                  <yarnVersion>v1.22.1</yarnVersion>
-                </configuration>
-              </execution>
-              <execution>
-                <!--
-                  Run yarn install when having updated dependencies
-                  -->
-                <id>npm install</id>
-                <goals>
-                  <goal>yarn</goal>
-                </goals>
-                <!-- Optional configuration which provides for running any yarn command -->
-                <configuration>
-                  <arguments>install</arguments>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <!--
-        Since building the ui is slightly time-consuming, and not all changes necessarily affect the ui, turn on
-        building the ui explicitly by running 'atlas-package -Dob.ui.dev'.
-        
-        This is faster than the production build as it does not perform all optimisations at build time.
-      -->
-      <id>Build the UI</id>
-      <activation>
-        <property>
-          <name>ui.dev</name>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>com.github.eirslett</groupId>
-            <artifactId>frontend-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>npm run build</id>
-                <goals>
-                  <goal>yarn</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
     </profile>
   </profiles>
 </project>
