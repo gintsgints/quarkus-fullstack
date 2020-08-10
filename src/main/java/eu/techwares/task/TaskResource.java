@@ -7,7 +7,9 @@ import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -32,6 +34,16 @@ public class TaskResource {
 	public Response createTask(Task task) {
 		Task.createTask(task);
 		return Response.ok(task).status(201).build();
+	}
+
+	@PUT
+	@Path("{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Operation(summary = "Updates task")
+	@Transactional
+	public Response updateTask(@PathParam("id") Long id, Task task) {
+		return Response.ok(Task.updateTask(id, task)).status(200).build();
 	}
 
 }

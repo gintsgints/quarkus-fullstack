@@ -5,6 +5,7 @@ import {
 } from 'vuex'
 
 export type Task = {
+  id?: number
   name: string
   due: Date
   done: boolean
@@ -28,6 +29,7 @@ export enum MutationTypes {
   INC_COUNTER = 'SET_COUNTER',
   SET_TASKS = 'SET_TASKS',
   ADD_TASK = 'ADD_TASK',
+  UPDATE_TASK = 'UPDATE_TASK',
   SET_HELLO = 'SET_HELLO'
 }
 
@@ -35,6 +37,7 @@ export enum ActionTypes {
   INC_COUNTER = 'SET_COUNTER',
   GET_TASKS = 'GET_TASKS',
   ADD_TASK = 'ADD_TASK',
+  UPDATE_TASK = 'UPDATE_TASK',
   HELLO = 'HELLO'
 }
 
@@ -43,6 +46,7 @@ export type Mutations<S = State> = {
   [ MutationTypes.SET_HELLO ](state: S, payload: string): void
   [ MutationTypes.SET_TASKS ](state: S, payload: Array<Task>): void
   [ MutationTypes.ADD_TASK ](state: S, payload: Task): void
+  [ MutationTypes.UPDATE_TASK ](state: S, payload: Task): void
 }
 
 const mutations: MutationTree<State> & Mutations = {
@@ -57,6 +61,12 @@ const mutations: MutationTree<State> & Mutations = {
   },
   [ MutationTypes.ADD_TASK ](state: State, payload: Task) {
     state.tasks.push(payload)
+  },
+  [ MutationTypes.UPDATE_TASK ](state: State, payload: Task) {
+    const index = state.tasks.findIndex((t: Task) => {
+      return t.id === payload.id
+    })
+    state.tasks[ index ] = payload
   }
 }
 
@@ -83,7 +93,11 @@ export interface Actions {
   [ ActionTypes.ADD_TASK ](
     { commit }: AugmentedActionContext,
     // eslint-disable-next-line
-    payload: any): void
+    payload: Task): void
+  [ ActionTypes.UPDATE_TASK ](
+    { commit }: AugmentedActionContext,
+    // eslint-disable-next-line
+    payload: { id: number, task: Task }): void
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -108,6 +122,15 @@ export const actions: ActionTree<State, State> & Actions = {
     })
     const respobject = await response.json()
     commit(MutationTypes.ADD_TASK, respobject)
+  },
+  async [ ActionTypes.UPDATE_TASK ]({ commit }, payload: { id: number; task: Task }) {
+    const response = await fetch(`/api/task/${payload.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload.task)
+    })
+    const respobject = await response.json()
+    commit(MutationTypes.UPDATE_TASK, respobject)
   }
 }
 

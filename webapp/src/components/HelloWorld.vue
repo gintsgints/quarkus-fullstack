@@ -4,7 +4,7 @@
     <input v-model="taskname" type="text" />
     <button @click="addTask">Add task</button>
     <div v-for="task in state.tasks" v-bind:key="task.id">
-      <input v-model="task.done" type="checkbox" />
+      <input @click="updateTask(task.id, task)" v-model="task.done" type="checkbox" />
       {{task.name}}
     </div>
     <h5>Counter: {{state.counter}}</h5>
@@ -16,15 +16,19 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted } from 'vue'
-import { useStore, ActionTypes } from '../store'
+import { useStore, ActionTypes, Task } from '../store'
 
 export default defineComponent({
   setup() {
     const taskname = ref('')
     const store = useStore()
     const state = ref(store.state)
+    const updateTask = (id: number, task: Task) => {
+      task.done = !task.done
+      store.dispatch(ActionTypes.UPDATE_TASK, { id, task })
+    }
     const addTask = () => {
-      store.dispatch(ActionTypes.ADD_TASK, { name: taskname.value, due: '2020-08-11', done: false })
+      store.dispatch(ActionTypes.ADD_TASK, { name: taskname.value, due: new Date(), done: false })
     }
     const hello = () => {
       store.dispatch(ActionTypes.HELLO, {})
@@ -38,6 +42,7 @@ export default defineComponent({
       taskname,
       state,
       addTask,
+      updateTask,
       hello,
       doubleCounter
     }

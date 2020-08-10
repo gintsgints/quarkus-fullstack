@@ -1,18 +1,18 @@
 package eu.techwares.task;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
+import javax.json.bind.annotation.JsonbDateFormat;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import java.time.LocalDate;
+import javax.ws.rs.WebApplicationException;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Entity
 public class Task extends PanacheEntity {
 	public String name;
-	public LocalDate due;
+	@JsonbDateFormat(value = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+	public ZonedDateTime due;
 	public Boolean done;
 
 	public static List<Task> findTasks(String name) {
@@ -22,6 +22,20 @@ public class Task extends PanacheEntity {
 		else {
 			return find("name like ?1", "%" + name + "%").list();
 		}
+	}
+
+	public static Task updateTask(Long id, Task task) {
+		Task entity = Task.findById(id);
+
+		if (entity == null) {
+			throw new WebApplicationException("Task with id of " + task.id + " does not exist.", 404);
+		}
+
+		entity.name = task.name;
+		entity.done = task.done;
+		entity.persist();
+
+		return entity;
 	}
 
 	public static void createTask(Task task) {
