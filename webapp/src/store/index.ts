@@ -13,14 +13,12 @@ export type Task = {
 
 export type State = {
   counter: number
-  msg: string
   tasks: Array<Task>
 }
 
 // declare state
 const state: State = {
   counter: 0,
-  msg: '',
   tasks: []
 }
 
@@ -30,7 +28,6 @@ export enum MutationTypes {
   SET_TASKS = 'SET_TASKS',
   ADD_TASK = 'ADD_TASK',
   UPDATE_TASK = 'UPDATE_TASK',
-  SET_HELLO = 'SET_HELLO'
 }
 
 export enum ActionTypes {
@@ -38,12 +35,10 @@ export enum ActionTypes {
   GET_TASKS = 'GET_TASKS',
   ADD_TASK = 'ADD_TASK',
   UPDATE_TASK = 'UPDATE_TASK',
-  HELLO = 'HELLO'
 }
 
 export type Mutations<S = State> = {
   [ MutationTypes.INC_COUNTER ](state: S, payload: number): void
-  [ MutationTypes.SET_HELLO ](state: S, payload: string): void
   [ MutationTypes.SET_TASKS ](state: S, payload: Array<Task>): void
   [ MutationTypes.ADD_TASK ](state: S, payload: Task): void
   [ MutationTypes.UPDATE_TASK ](state: S, payload: Task): void
@@ -52,9 +47,6 @@ export type Mutations<S = State> = {
 const mutations: MutationTree<State> & Mutations = {
   [ MutationTypes.INC_COUNTER ](state: State, payload: number) {
     state.counter += payload
-  },
-  [ MutationTypes.SET_HELLO ](state: State, payload: string) {
-    state.msg = payload
   },
   [ MutationTypes.SET_TASKS ](state: State, payload: Array<Task>) {
     state.tasks = payload
@@ -82,10 +74,6 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: number
   ): void
-  [ ActionTypes.HELLO ](
-    { commit }: AugmentedActionContext,
-    // eslint-disable-next-line
-    payload: any): void
   [ ActionTypes.GET_TASKS ](
     { commit }: AugmentedActionContext,
     // eslint-disable-next-line
@@ -103,11 +91,6 @@ export interface Actions {
 export const actions: ActionTree<State, State> & Actions = {
   [ ActionTypes.INC_COUNTER ]({ commit }, payload: number) {
     commit(MutationTypes.INC_COUNTER, payload)
-  },
-  async [ ActionTypes.HELLO ]({ commit }) {
-    const response = await fetch('/api/hello')
-    const respobject = await response.json()
-    commit(MutationTypes.SET_HELLO, respobject.msg)
   },
   async [ ActionTypes.GET_TASKS ]({ commit }) {
     const response = await fetch('/api/task')

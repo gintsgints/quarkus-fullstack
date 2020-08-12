@@ -7,10 +7,6 @@
       <input @click="updateTask(task.id, task)" v-model="task.done" type="checkbox" />
       {{task.name}}
     </div>
-    <h5>Counter: {{state.counter}}</h5>
-    <h5>Double counter: {{doubleCounter}}</h5>
-    <button @click="hello">Call Hello API</button>
-    <h5>API Message: {{state.msg}}</h5>
   </div>
 </template>
 
@@ -30,9 +26,6 @@ export default defineComponent({
     const addTask = () => {
       store.dispatch(ActionTypes.ADD_TASK, { name: taskname.value, due: new Date(), done: false })
     }
-    const hello = () => {
-      store.dispatch(ActionTypes.HELLO, {})
-    }
     onMounted(() => {
       store.dispatch(ActionTypes.GET_TASKS, {})
     })
@@ -43,7 +36,6 @@ export default defineComponent({
       state,
       addTask,
       updateTask,
-      hello,
       doubleCounter
     }
   },
