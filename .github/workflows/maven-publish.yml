@@ -36,5 +36,3 @@ jobs:
 
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-        env:
-          QUARKUS_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
