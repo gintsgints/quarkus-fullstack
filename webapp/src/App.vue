@@ -37,6 +37,16 @@ body {
   margin:0;
 }
 
+/* Style inputs, select elements and textareas */
+input[type=text], select, textarea{
+  width: 50%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
 button {
   display: inline-block;
   padding: 0.7em 1.7em;

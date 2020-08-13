@@ -1,11 +1,8 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <input v-model="taskname" type="text" />
+    <input v-model="taskname" type="text" placeholder="Write task to add" />
     <button @click="addTask">Add task</button>
-    <div v-if="loading">
-      Loading tasks, please wait...
-    </div>
     <div v-if="loading" class="lds-hourglass"></div>
     <div v-for="task in state.tasks" v-bind:key="task.id">
       <input @click="updateTask(task.id, task)" v-model="task.done" type="checkbox" />
