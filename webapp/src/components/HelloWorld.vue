@@ -3,6 +3,9 @@
     <h1>{{ msg }}</h1>
     <input v-model="taskname" type="text" />
     <button @click="addTask">Add task</button>
+    <div v-if="loading">
+      Loading tasks, please wait...
+    </div>
     <div v-for="task in state.tasks" v-bind:key="task.id">
       <input @click="updateTask(task.id, task)" v-model="task.done" type="checkbox" />
       {{task.name}}
@@ -29,14 +32,14 @@ export default defineComponent({
     onMounted(() => {
       store.dispatch(ActionTypes.GET_TASKS, {})
     })
-    const doubleCounter = computed(() => store.getters.doubleCounter)
+    const loading = computed(() => store.getters.loading)
 
     return {
       taskname,
       state,
       addTask,
       updateTask,
-      doubleCounter
+      loading
     }
   },
   name: 'HelloWorld',

@@ -12,41 +12,40 @@ export type Task = {
 }
 
 export type State = {
-  counter: number
+  loading: boolean
   tasks: Array<Task>
 }
 
 // declare state
 const state: State = {
-  counter: 0,
+  loading: false,
   tasks: []
 }
 
 // Mutations & actions enums
 export enum MutationTypes {
-  INC_COUNTER = 'SET_COUNTER',
+  SET_LOADING = 'SET_LOADING',
   SET_TASKS = 'SET_TASKS',
   ADD_TASK = 'ADD_TASK',
   UPDATE_TASK = 'UPDATE_TASK',
 }
 
 export enum ActionTypes {
-  INC_COUNTER = 'SET_COUNTER',
   GET_TASKS = 'GET_TASKS',
   ADD_TASK = 'ADD_TASK',
   UPDATE_TASK = 'UPDATE_TASK',
 }
 
 export type Mutations<S = State> = {
-  [ MutationTypes.INC_COUNTER ](state: S, payload: number): void
+  [ MutationTypes.SET_LOADING ](state: S, payload: boolean): void
   [ MutationTypes.SET_TASKS ](state: S, payload: Array<Task>): void
   [ MutationTypes.ADD_TASK ](state: S, payload: Task): void
   [ MutationTypes.UPDATE_TASK ](state: S, payload: Task): void
 }
 
 const mutations: MutationTree<State> & Mutations = {
-  [ MutationTypes.INC_COUNTER ](state: State, payload: number) {
-    state.counter += payload
+  [ MutationTypes.SET_LOADING ](state: State, payload: boolean) {
+    state.loading = payload
   },
   [ MutationTypes.SET_TASKS ](state: State, payload: Array<Task>) {
     state.tasks = payload
@@ -70,10 +69,6 @@ type AugmentedActionContext = {
 } & Omit<ActionContext<State, State>, 'commit'>
 
 export interface Actions {
-  [ ActionTypes.INC_COUNTER ](
-    { commit }: AugmentedActionContext,
-    payload: number
-  ): void
   [ ActionTypes.GET_TASKS ](
     { commit }: AugmentedActionContext,
     // eslint-disable-next-line
@@ -89,15 +84,15 @@ export interface Actions {
 }
 
 export const actions: ActionTree<State, State> & Actions = {
-  [ ActionTypes.INC_COUNTER ]({ commit }, payload: number) {
-    commit(MutationTypes.INC_COUNTER, payload)
-  },
   async [ ActionTypes.GET_TASKS ]({ commit }) {
+    commit(MutationTypes.SET_LOADING, true)
     const response = await fetch('/api/task')
     const respobject = await response.json()
     commit(MutationTypes.SET_TASKS, respobject)
+    commit(MutationTypes.SET_LOADING, false)
   },
   async [ ActionTypes.ADD_TASK ]({ commit }, payload: Task) {
+    commit(MutationTypes.SET_LOADING, true)
     const response = await fetch('/api/task', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -105,8 +100,10 @@ export const actions: ActionTree<State, State> & Actions = {
     })
     const respobject = await response.json()
     commit(MutationTypes.ADD_TASK, respobject)
+    commit(MutationTypes.SET_LOADING, false)
   },
   async [ ActionTypes.UPDATE_TASK ]({ commit }, payload: { id: number; task: Task }) {
+    commit(MutationTypes.SET_LOADING, true)
     const response = await fetch(`/api/task/${payload.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -114,16 +111,17 @@ export const actions: ActionTree<State, State> & Actions = {
     })
     const respobject = await response.json()
     commit(MutationTypes.UPDATE_TASK, respobject)
+    commit(MutationTypes.SET_LOADING, false)
   }
 }
 
 export type Getters = {
-  doubleCounter(state: State): number
+  loading(state: State): boolean
 }
 
 export const getters: GetterTree<State, State> & Getters = {
-  doubleCounter: (state) => {
-    return state.counter * 2
+  loading: (state) => {
+    return state.loading
   }
 }
 
