@@ -6,6 +6,7 @@
     <div v-if="loading">
       Loading tasks, please wait...
     </div>
+    <div v-if="loading" class="lds-hourglass"></div>
     <div v-for="task in state.tasks" v-bind:key="task.id">
       <input @click="updateTask(task.id, task)" v-model="task.done" type="checkbox" />
       {{task.name}}
