@@ -46,4 +46,13 @@ public class TaskResource {
 		return Response.ok(Task.updateTask(id, task)).status(200).build();
 	}
 
+	@GET
+	@Path("/clear")
+	@Operation(summary = "Clean up all done tasks")
+	@Transactional
+	public Response clearTasks() {
+		Task.clearDone();
+		return Response.ok().status(204).build();
+	}
+
 }

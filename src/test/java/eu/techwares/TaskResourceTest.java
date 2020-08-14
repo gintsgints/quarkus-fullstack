@@ -95,4 +95,20 @@ public class TaskResourceTest {
 				);
 	}
 
+	@Test
+	public void testDeteTask() {
+		given()
+				.when().get("/api/task/clear")
+				.then()
+				.statusCode(204);
+
+		given()
+				.when().get("/api/task")
+				.then()
+				.statusCode(200)
+				.body(
+						not(containsString("Read the book")),
+						containsString("Make a dinner")
+				);
+	}
 }
