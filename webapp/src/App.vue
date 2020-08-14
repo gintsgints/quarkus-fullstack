@@ -69,6 +69,10 @@ button:active {
   box-shadow:inset 0 0.6em 2em -0.3em rgba(0,0,0,0.15),inset 0 0 0em 0.05em rgba(255,255,255,0.12);
 }
 
+button:disabled {
+  background-color: lightgray;
+}
+
 @media all and (max-width:30em){
  button{
   display:block;

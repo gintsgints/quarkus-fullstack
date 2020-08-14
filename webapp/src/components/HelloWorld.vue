@@ -1,8 +1,8 @@
 <template>
-  <div class="hello">
+  <div @keyup.enter="addTask">
     <h1>{{ msg }}</h1>
     <input v-model="taskname" type="text" placeholder="Write task to add" />
-    <button @click="addTask">Add task</button>
+    <button :disabled="taskname.length === 0" @click="addTask">Add task</button>
     <div>
       <button @click="clearTasks" >Remove finished tasks</button>
     </div>
@@ -32,7 +32,10 @@ export default defineComponent({
       store.dispatch(ActionTypes.UPDATE_TASK, { id, task })
     }
     const addTask = () => {
-      store.dispatch(ActionTypes.ADD_TASK, { name: taskname.value, due: new Date(), done: false })
+      if (taskname.value.length > 0) {
+        store.dispatch(ActionTypes.ADD_TASK, { name: taskname.value, due: new Date(), done: false })
+        taskname.value = ''
+      }
     }
     const clearTasks = () => {
       store.dispatch(ActionTypes.CLEAR_TASKS, {})
