@@ -78,7 +78,6 @@ button:active {
 
 .lds-hourglass {
   display: inline-block;
-  position: relative;
   width: 80px;
   height: 80px;
 }

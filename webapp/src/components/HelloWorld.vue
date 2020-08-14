@@ -3,13 +3,15 @@
     <h1>{{ msg }}</h1>
     <input v-model="taskname" type="text" placeholder="Write task to add" />
     <button @click="addTask">Add task</button>
-    <div v-if="loading" class="lds-hourglass"></div>
     <div class="grid">
       <div v-for="task in state.tasks" v-bind:key="task.id">
-        <input @click="updateTask(task.id, task)" v-model="task.done" type="checkbox" />
-        {{task.name}}
+        <div v-if="!loading">
+          <input @click="updateTask(task.id, task)" v-model="task.done" type="checkbox" />
+          {{task.name}}
+        </div>
       </div>
     </div>
+    <div v-if="loading" class="lds-hourglass"></div>
   </div>
 </template>
 
