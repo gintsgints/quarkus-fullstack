@@ -4,9 +4,11 @@
     <input v-model="taskname" type="text" placeholder="Write task to add" />
     <button @click="addTask">Add task</button>
     <div v-if="loading" class="lds-hourglass"></div>
-    <div v-for="task in state.tasks" v-bind:key="task.id">
-      <input @click="updateTask(task.id, task)" v-model="task.done" type="checkbox" />
-      {{task.name}}
+    <div class="grid">
+      <div v-for="task in state.tasks" v-bind:key="task.id">
+        <input @click="updateTask(task.id, task)" v-model="task.done" type="checkbox" />
+        {{task.name}}
+      </div>
     </div>
   </div>
 </template>
@@ -47,20 +49,16 @@ export default defineComponent({
 })
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+
+.grid {
+  display: grid;
+  justify-items: start;
+  grid-template-columns: 25% [done] 50% [task] 25%;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+.grid > div {
+  grid-column-start: 2;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
 </style>
