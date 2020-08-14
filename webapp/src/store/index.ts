@@ -34,6 +34,7 @@ export enum ActionTypes {
   GET_TASKS = 'GET_TASKS',
   ADD_TASK = 'ADD_TASK',
   UPDATE_TASK = 'UPDATE_TASK',
+  CLEAR_TASKS = 'CLEAR_TASKS'
 }
 
 export type Mutations<S = State> = {
@@ -81,6 +82,10 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     // eslint-disable-next-line
     payload: { id: number, task: Task }): void
+  [ ActionTypes.CLEAR_TASKS ](
+    { commit }: AugmentedActionContext,
+    // eslint-disable-next-line
+    payload: any): void
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -111,6 +116,14 @@ export const actions: ActionTree<State, State> & Actions = {
     })
     const respobject = await response.json()
     commit(MutationTypes.UPDATE_TASK, respobject)
+    commit(MutationTypes.SET_LOADING, false)
+  },
+  async [ ActionTypes.CLEAR_TASKS ]({ commit }) {
+    commit(MutationTypes.SET_LOADING, true)
+    await fetch('/api/task/clear')
+    const response = await fetch('/api/task')
+    const respobject = await response.json()
+    commit(MutationTypes.SET_TASKS, respobject)
     commit(MutationTypes.SET_LOADING, false)
   }
 }

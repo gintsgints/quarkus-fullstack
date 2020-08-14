@@ -3,6 +3,9 @@
     <h1>{{ msg }}</h1>
     <input v-model="taskname" type="text" placeholder="Write task to add" />
     <button @click="addTask">Add task</button>
+    <div>
+      <button @click="clearTasks" >Remove finished tasks</button>
+    </div>
     <div class="grid">
       <div v-for="task in state.tasks" v-bind:key="task.id">
         <div v-if="!loading">
@@ -31,6 +34,9 @@ export default defineComponent({
     const addTask = () => {
       store.dispatch(ActionTypes.ADD_TASK, { name: taskname.value, due: new Date(), done: false })
     }
+    const clearTasks = () => {
+      store.dispatch(ActionTypes.CLEAR_TASKS, {})
+    }
     onMounted(() => {
       store.dispatch(ActionTypes.GET_TASKS, {})
     })
@@ -41,6 +47,7 @@ export default defineComponent({
       state,
       addTask,
       updateTask,
+      clearTasks,
       loading
     }
   },
