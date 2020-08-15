@@ -4,12 +4,14 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 
 import javax.json.bind.annotation.JsonbDateFormat;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotBlank;
 import javax.ws.rs.WebApplicationException;
 import java.time.ZonedDateTime;
 import java.util.List;
 
 @Entity
 public class Task extends PanacheEntity {
+	@NotBlank(message = "Title may not be blank")
 	public String name;
 	@JsonbDateFormat(value = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
 	public ZonedDateTime due;

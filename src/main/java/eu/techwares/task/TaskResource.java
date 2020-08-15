@@ -4,6 +4,7 @@ import org.eclipse.microprofile.openapi.annotations.Operation;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -31,7 +32,7 @@ public class TaskResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Creates task")
 	@Transactional
-	public Response createTask(Task task) {
+	public Response createTask(@Valid Task task) {
 		Task.createTask(task);
 		return Response.ok(task).status(201).build();
 	}
@@ -42,7 +43,7 @@ public class TaskResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Operation(summary = "Updates task")
 	@Transactional
-	public Response updateTask(@PathParam("id") Long id, Task task) {
+	public Response updateTask(@PathParam("id") Long id, @Valid Task task) {
 		return Response.ok(Task.updateTask(id, task)).status(200).build();
 	}
 

@@ -71,6 +71,24 @@ public class TaskResourceTest {
 	}
 
 	@Test
+	public void testPostInvalidTask() {
+		Task task = new Task();
+		task.done = false;
+		task.name = "";
+
+		given()
+				.when()
+				.contentType("application/json")
+				.body(jsonb.toJson(task))
+				.post("/api/task")
+				.then()
+				.statusCode(400)
+				.body(
+						containsString("Title may not be blank")
+				);
+	}
+
+	@Test
 	public void testUpdateTaskEndpoint() {
 		Task task = Task.findById(1L);
 		task.name = "Read the paper";
