@@ -13,6 +13,7 @@ export type Task = {
 
 export type State = {
   loading: boolean
+  loaded: boolean
   error: string
   tasks: Array<Task>
 }
@@ -21,6 +22,7 @@ export type State = {
 const state: State = {
   error: '',
   loading: false,
+  loaded: false,
   tasks: []
 }
 
@@ -54,6 +56,7 @@ const mutations: MutationTree<State> & Mutations = {
   },
   [ MutationTypes.SET_TASKS ](state: State, payload: Array<Task>) {
     state.tasks = payload
+    state.loaded = true
   },
   [ MutationTypes.ADD_TASK ](state: State, payload: Task) {
     state.tasks.push(payload)
@@ -98,18 +101,20 @@ export interface Actions {
 
 export const actions: ActionTree<State, State> & Actions = {
   async [ ActionTypes.GET_TASKS ]({ commit }) {
-    commit(MutationTypes.SET_LOADING, true)
-    try {
-      const response = await fetch('/api/task')
-      if (!response.ok) {
-        throw Error(response.statusText)
+    if (!state.loaded) {
+      commit(MutationTypes.SET_LOADING, true)
+      try {
+        const response = await fetch('/api/task')
+        if (!response.ok) {
+          throw Error(response.statusText)
+        }
+        const respobject = await response.json()
+        commit(MutationTypes.SET_TASKS, respobject)
+      } catch (error) {
+        commit(MutationTypes.SET_ERROR, error)
       }
-      const respobject = await response.json()
-      commit(MutationTypes.SET_TASKS, respobject)
-    } catch (error) {
-      commit(MutationTypes.SET_ERROR, error)
+      commit(MutationTypes.SET_LOADING, false)
     }
-    commit(MutationTypes.SET_LOADING, false)
   },
   async [ ActionTypes.ADD_TASK ]({ commit }, payload: Task) {
     commit(MutationTypes.SET_LOADING, true)
