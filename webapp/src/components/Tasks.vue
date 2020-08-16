@@ -40,7 +40,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
 .grid {
   display: grid;
   justify-items: start;
@@ -50,5 +49,4 @@ export default defineComponent({
 .grid > div {
   grid-column-start: 2;
 }
-
 </style>

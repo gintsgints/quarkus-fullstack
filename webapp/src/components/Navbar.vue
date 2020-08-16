@@ -1,7 +1,11 @@
 <template>
   <ul>
-    <li><router-link class="active" to="/">Home</router-link></li>
-    <li><router-link to="/about">About</router-link></li>
+    <li>
+      <router-link class="active" to="/">Home</router-link>
+    </li>
+    <li>
+      <router-link to="/about">About</router-link>
+    </li>
   </ul>
 </template>
 
@@ -34,6 +38,6 @@ li a:hover:not(.active) {
 }
 
 a.router-link-exact-active {
-  background-color: #4CAF50;
+  background-color: #4caf50;
 }
 </style>

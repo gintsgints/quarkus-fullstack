@@ -5,7 +5,7 @@
     <input v-model="taskname" type="text" placeholder="Write task to add" />
     <button :disabled="taskname.length === 0" @click="addTask">Add task</button>
     <div>
-      <button @click="clearTasks" >Remove finished tasks</button>
+      <button @click="clearTasks">Remove finished tasks</button>
     </div>
     <Suspense>
       <template #default>
