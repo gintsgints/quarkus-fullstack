@@ -13,11 +13,13 @@ export type Task = {
 
 export type State = {
   loading: boolean
+  error: string
   tasks: Array<Task>
 }
 
 // declare state
 const state: State = {
+  error: '',
   loading: false,
   tasks: []
 }
@@ -28,6 +30,7 @@ export enum MutationTypes {
   SET_TASKS = 'SET_TASKS',
   ADD_TASK = 'ADD_TASK',
   UPDATE_TASK = 'UPDATE_TASK',
+  SET_ERROR = 'SET_ERROR'
 }
 
 export enum ActionTypes {
@@ -42,6 +45,7 @@ export type Mutations<S = State> = {
   [ MutationTypes.SET_TASKS ](state: S, payload: Array<Task>): void
   [ MutationTypes.ADD_TASK ](state: S, payload: Task): void
   [ MutationTypes.UPDATE_TASK ](state: S, payload: Task): void
+  [ MutationTypes.SET_ERROR ](state: S, payload: string): void
 }
 
 const mutations: MutationTree<State> & Mutations = {
@@ -59,7 +63,11 @@ const mutations: MutationTree<State> & Mutations = {
       return t.id === payload.id
     })
     state.tasks[ index ] = payload
+  },
+  [ MutationTypes.SET_ERROR ](state: State, payload: string) {
+    state.error = payload
   }
+
 }
 
 type AugmentedActionContext = {
@@ -91,39 +99,67 @@ export interface Actions {
 export const actions: ActionTree<State, State> & Actions = {
   async [ ActionTypes.GET_TASKS ]({ commit }) {
     commit(MutationTypes.SET_LOADING, true)
-    const response = await fetch('/api/task')
-    const respobject = await response.json()
-    commit(MutationTypes.SET_TASKS, respobject)
+    try {
+      const response = await fetch('/api/task')
+      if (!response.ok) {
+        throw Error(response.statusText)
+      }
+      const respobject = await response.json()
+      commit(MutationTypes.SET_TASKS, respobject)
+    } catch (error) {
+      commit(MutationTypes.SET_ERROR, error)
+    }
     commit(MutationTypes.SET_LOADING, false)
   },
   async [ ActionTypes.ADD_TASK ]({ commit }, payload: Task) {
     commit(MutationTypes.SET_LOADING, true)
-    const response = await fetch('/api/task', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    })
-    const respobject = await response.json()
-    commit(MutationTypes.ADD_TASK, respobject)
+    try {
+      const response = await fetch('/api/task', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      if (!response.ok) {
+        throw Error(response.statusText)
+      }
+      const respobject = await response.json()
+      commit(MutationTypes.ADD_TASK, respobject)
+    } catch (error) {
+      commit(MutationTypes.SET_ERROR, error)
+    }
     commit(MutationTypes.SET_LOADING, false)
   },
   async [ ActionTypes.UPDATE_TASK ]({ commit }, payload: { id: number; task: Task }) {
     commit(MutationTypes.SET_LOADING, true)
-    const response = await fetch(`/api/task/${payload.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload.task)
-    })
-    const respobject = await response.json()
-    commit(MutationTypes.UPDATE_TASK, respobject)
+    try {
+      const response = await fetch(`/api/task/${payload.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload.task)
+      })
+      if (!response.ok) {
+        throw Error(response.statusText)
+      }
+      const respobject = await response.json()
+      commit(MutationTypes.UPDATE_TASK, respobject)
+    } catch (error) {
+      commit(MutationTypes.SET_ERROR, error)
+    }
     commit(MutationTypes.SET_LOADING, false)
   },
   async [ ActionTypes.CLEAR_TASKS ]({ commit }) {
     commit(MutationTypes.SET_LOADING, true)
-    await fetch('/api/task/clear')
-    const response = await fetch('/api/task')
-    const respobject = await response.json()
-    commit(MutationTypes.SET_TASKS, respobject)
+    try {
+      await fetch('/api/task/clear')
+      const response = await fetch('/api/task')
+      if (!response.ok) {
+        throw Error(response.statusText)
+      }
+      const respobject = await response.json()
+      commit(MutationTypes.SET_TASKS, respobject)
+    } catch (error) {
+      commit(MutationTypes.SET_ERROR, error)
+    }
     commit(MutationTypes.SET_LOADING, false)
   }
 }

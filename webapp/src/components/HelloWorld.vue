@@ -1,6 +1,7 @@
 <template>
   <div @keyup.enter="addTask">
     <h1>{{ msg }}</h1>
+    <h4 class="error">Data connection problem: {{ state.error }}</h4>
     <input v-model="taskname" type="text" placeholder="Write task to add" />
     <button :disabled="taskname.length === 0" @click="addTask">Add task</button>
     <div>
@@ -16,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onErrorCaptured } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { useStore, ActionTypes } from '../store'
 import Tasks from '@/components/Tasks.vue'
 
@@ -53,3 +54,9 @@ export default defineComponent({
   }
 })
 </script>
+
+<style scoped>
+.error {
+  color: red;
+}
+</style>
