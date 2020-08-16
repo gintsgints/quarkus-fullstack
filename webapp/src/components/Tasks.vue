@@ -1,10 +1,14 @@
 <template>
   <div class="grid">
     <div v-for="task in state.tasks" v-bind:key="task.id">
-      <input @click="updateTask(task.id, task)" v-model="task.done" type="checkbox" />
-      {{task.name}}
+      <input
+        @click="updateTask(task.id, task)"
+        v-model="task.done"
+        type="checkbox"
+      />
+      {{ task.name }}
     </div>
-    <div v-if="error">{{error}}</div>
+    <div v-if="error">{{ error }}</div>
   </div>
 </template>
 

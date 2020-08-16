@@ -28,7 +28,11 @@ export default defineComponent({
     const state = ref(store.state)
     const addTask = () => {
       if (taskname.value.length > 0) {
-        store.dispatch(ActionTypes.ADD_TASK, { name: taskname.value, due: new Date(), done: false })
+        store.dispatch(ActionTypes.ADD_TASK, {
+          name: taskname.value,
+          due: new Date(),
+          done: false
+        })
         taskname.value = ''
       }
     }
