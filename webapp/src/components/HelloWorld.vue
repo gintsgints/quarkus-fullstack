@@ -1,7 +1,9 @@
 <template>
   <div @keyup.enter="addTask">
     <h1>{{ msg }}</h1>
-    <h4 class="error">Data connection problem: {{ state.error }}</h4>
+    <h4 v-if="state.error" class="error">
+      Data connection problem: {{ state.error }}
+    </h4>
     <input v-model="taskname" type="text" placeholder="Write task to add" />
     <button :disabled="taskname.length === 0" @click="addTask">Add task</button>
     <div>
