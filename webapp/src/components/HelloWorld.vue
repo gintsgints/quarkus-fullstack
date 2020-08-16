@@ -6,31 +6,25 @@
     <div>
       <button @click="clearTasks" >Remove finished tasks</button>
     </div>
-    <div class="grid">
-      <div v-for="task in state.tasks" v-bind:key="task.id">
-        <div v-if="!loading">
-          <input @click="updateTask(task.id, task)" v-model="task.done" type="checkbox" />
-          {{task.name}}
-        </div>
-      </div>
-    </div>
+    <Suspense>
+      <template #default>
+        <Tasks />
+      </template>
+    </Suspense>
     <div v-if="loading" class="lds-hourglass"></div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted } from 'vue'
-import { useStore, ActionTypes, Task } from '../store'
+import { defineComponent, ref, computed, onErrorCaptured } from 'vue'
+import { useStore, ActionTypes } from '../store'
+import Tasks from '@/components/Tasks.vue'
 
 export default defineComponent({
   setup() {
     const taskname = ref('')
     const store = useStore()
     const state = ref(store.state)
-    const updateTask = (id: number, task: Task) => {
-      task.done = !task.done
-      store.dispatch(ActionTypes.UPDATE_TASK, { id, task })
-    }
     const addTask = () => {
       if (taskname.value.length > 0) {
         store.dispatch(ActionTypes.ADD_TASK, { name: taskname.value, due: new Date(), done: false })
@@ -40,37 +34,22 @@ export default defineComponent({
     const clearTasks = () => {
       store.dispatch(ActionTypes.CLEAR_TASKS, {})
     }
-    onMounted(() => {
-      store.dispatch(ActionTypes.GET_TASKS, {})
-    })
     const loading = computed(() => store.getters.loading)
 
     return {
       taskname,
       state,
       addTask,
-      updateTask,
       clearTasks,
       loading
     }
   },
   name: 'HelloWorld',
+  components: {
+    Tasks
+  },
   props: {
     msg: String
   }
 })
 </script>
-
-<style scoped>
-
-.grid {
-  display: grid;
-  justify-items: start;
-  grid-template-columns: 25% [done] 50% [task] 25%;
-}
-
-.grid > div {
-  grid-column-start: 2;
-}
-
-</style>
