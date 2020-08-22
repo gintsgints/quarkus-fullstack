@@ -19,9 +19,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, ref, computed, defineAsyncComponent } from 'vue'
 import { useStore, ActionTypes } from '../store'
-import Tasks from '@/components/Tasks.vue'
+
+const Tasks = defineAsyncComponent(() =>
+  import('@/components/Tasks.vue' /* webpackChunkName: "tasks" */)
+)
 
 export default defineComponent({
   setup() {

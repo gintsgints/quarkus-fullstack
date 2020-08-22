@@ -1,9 +1,15 @@
 <template>
-  <div id="app">
-    <Navbar />
-    <div id="container">
-      <router-view/>
+  <div id="app" class="wrapper">
+    <header class="main-head"></header>
+    <div class="main-nav">
+      <Navbar />
     </div>
+    <article class="content">
+      <router-view />
+    </article>
+    <aside class="side"></aside>
+    <div class="ad"></div>
+    <footer class="main-footer">© Techwares.eu</footer>
   </div>
 </template>
 
@@ -27,18 +33,73 @@ export default {
   color: #2c3e50;
 }
 
-#container {
-  padding:20px;
-  margin-top:30px;
-  height:1500px;
+/* Layout definition */
+/* https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Realizing_common_layouts_using_CSS_Grid_Layout */
+
+.main-head {
+  grid-area: header;
+}
+.content {
+  grid-area: content;
+}
+.main-nav {
+  grid-area: nav;
+}
+.side {
+  grid-area: sidebar;
+}
+.ad {
+  grid-area: ad;
+}
+.main-footer {
+  grid-area: footer;
 }
 
-body {
-  margin:0;
+.wrapper {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-areas:
+    'header'
+    'nav'
+    'content'
+    'sidebar'
+    'ad'
+    'footer';
+}
+
+@media (min-width: 500px) {
+  .wrapper {
+    grid-template-columns: 1fr 3fr;
+    grid-template-areas:
+      'header  header'
+      'nav     nav'
+      'sidebar content'
+      'ad      footer';
+  }
+  nav ul {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+@media (min-width: 700px) {
+  .wrapper {
+    grid-template-columns: 1fr 4fr 1fr;
+    grid-template-areas:
+      'header header  header'
+      'nav    content sidebar'
+      'nav    content ad'
+      'footer footer  footer';
+  }
+  nav ul {
+    flex-direction: column;
+  }
 }
 
 /* Style inputs, select elements and textareas */
-input[type=text], select, textarea{
+input[type='text'],
+select,
+textarea {
   width: 50%;
   padding: 8px;
   border: 1px solid #ccc;
@@ -53,28 +114,31 @@ button {
   margin: 0 0.3em 0.3em 0;
   border-radius: 0.2em;
   box-sizing: border-box;
-  text-decoration:none;
-  color:#FFFFFF;
-  background-color:#4CAF50;
-  box-shadow:inset 0 -0.6em 1em -0.35em rgba(0,0,0,0.17),inset 0 0.6em 2em -0.3em rgba(255,255,255,0.15),inset 0 0 0em 0.05em rgba(255,255,255,0.12);
-  text-align:center;
+  text-decoration: none;
+  color: #ffffff;
+  background-color: #4caf50;
+  box-shadow: inset 0 -0.6em 1em -0.35em rgba(0, 0, 0, 0.17),
+    inset 0 0.6em 2em -0.3em rgba(255, 255, 255, 0.15),
+    inset 0 0 0em 0.05em rgba(255, 255, 255, 0.12);
+  text-align: center;
   border: 0;
   margin: 8px 4px;
 }
 
 button:active {
-  box-shadow:inset 0 0.6em 2em -0.3em rgba(0,0,0,0.15),inset 0 0 0em 0.05em rgba(255,255,255,0.12);
+  box-shadow: inset 0 0.6em 2em -0.3em rgba(0, 0, 0, 0.15),
+    inset 0 0 0em 0.05em rgba(255, 255, 255, 0.12);
 }
 
 button:disabled {
   background-color: lightgray;
 }
 
-@media all and (max-width:30em){
- button{
-  display:block;
-  margin:0.4em auto;
- }
+@media all and (max-width: 30em) {
+  button {
+    display: block;
+    margin: 0.4em auto;
+  }
 }
 
 .lds-hourglass {
@@ -83,7 +147,7 @@ button:disabled {
   height: 80px;
 }
 .lds-hourglass:after {
-  content: " ";
+  content: ' ';
   display: block;
   border-radius: 50%;
   width: 0;
@@ -107,5 +171,4 @@ button:disabled {
     transform: rotate(1800deg);
   }
 }
-
 </style>
