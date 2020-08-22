@@ -14,21 +14,20 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { useStore, ActionTypes, Task } from '../store'
+import { useState, Task } from '../store'
 
 export default defineComponent({
   async setup() {
     const error = ref(null)
-    const store = useStore()
-    const state = ref(store.state)
+    const state = useState()
 
-    const updateTask = (id: number, task: Task) => {
+    const updateTask = async(id: number, task: Task) => {
       task.done = !task.done
-      store.dispatch(ActionTypes.UPDATE_TASK, { id, task })
+      await state.updateTask(id, task)
     }
 
     try {
-      await store.dispatch(ActionTypes.GET_TASKS, {})
+      await state.getTasks()
     } catch (e) {
       error.value = e
     }

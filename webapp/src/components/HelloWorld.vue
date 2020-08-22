@@ -14,13 +14,13 @@
         <Tasks />
       </template>
     </Suspense>
-    <div v-if="loading" class="lds-hourglass"></div>
+    <div v-if="state.loading" class="lds-hourglass"></div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, defineAsyncComponent } from 'vue'
-import { useStore, ActionTypes } from '../store'
+import { defineComponent, ref, defineAsyncComponent } from 'vue'
+import { useState } from '../store'
 
 const Tasks = defineAsyncComponent(() =>
   import('@/components/Tasks.vue' /* webpackChunkName: "tasks" */)
@@ -29,11 +29,11 @@ const Tasks = defineAsyncComponent(() =>
 export default defineComponent({
   setup() {
     const taskname = ref('')
-    const store = useStore()
-    const state = ref(store.state)
+    const state = useState()
+
     const addTask = () => {
       if (taskname.value.length > 0) {
-        store.dispatch(ActionTypes.ADD_TASK, {
+        state.addTask({
           name: taskname.value,
           due: new Date(),
           done: false
@@ -42,17 +42,10 @@ export default defineComponent({
       }
     }
     const clearTasks = () => {
-      store.dispatch(ActionTypes.CLEAR_TASKS, {})
+      state.clearTasks()
     }
-    const loading = computed(() => store.getters.loading)
 
-    return {
-      taskname,
-      state,
-      addTask,
-      clearTasks,
-      loading
-    }
+    return { state, taskname, addTask, clearTasks }
   },
   name: 'HelloWorld',
   components: {
