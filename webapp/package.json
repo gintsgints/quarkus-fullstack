@@ -11,7 +11,7 @@
     "core-js": "^3.19.1",
     "vue": "^3.2.16",
     "vue-class-component": "^7.2.6",
-    "vue-property-decorator": "^8.4.2",
+    "vue-property-decorator": "^9.1.2",
     "vue-router": "^4.0.12",
     "vuex": "^4.0.2"
   },
@@ -19,15 +19,6 @@
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
     "@vitejs/plugin-vue": "^1.9.3",
-    "@vue/cli-plugin-babel": "^4.5.15",
-    "@vue/cli-plugin-eslint": "^4.5.15",
-    "@vue/cli-plugin-router": "^4.5.15",
-    "@vue/cli-plugin-typescript": "^4.5.15",
-    "@vue/cli-plugin-vuex": "^4.5.15",
-    "@vue/cli-service": "^4.5.15",
-    "@vue/compiler-sfc": "^3.2.22",
-    "@vue/eslint-config-standard": "^5.1.2",
-    "@vue/eslint-config-typescript": "^5.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-node": "^11.1.0",
@@ -37,7 +28,6 @@
     "prettier-config-standard": "^1.0.1",
     "typescript": "^4.4.3",
     "vite": "^2.6.4",
-    "vue-cli-plugin-vue-next": "^0.1.4",
     "vue-tsc": "^0.3.0"
   }
 }
