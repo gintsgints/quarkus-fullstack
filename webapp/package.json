@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vite preview",
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build"
+    "build": "vue-tsc --noEmit && vite build",
+    "prod": "vue-tsc --noEmit && vite build --outDir ../src/main/resources/META-INF/resources/",
+    "help": "vite build --help"
   },
   "dependencies": {
     "core-js": "^3.19.1",

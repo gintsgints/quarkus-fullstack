@@ -2,18 +2,20 @@
 import { ref } from 'vue'
 import { useState, Task } from '../store'
 
-const error = ref(null)
+const error = ref('')
 const state = useState()
 
-const updateTask = async (id: number, task: Task) => {
-  task.done = !task.done
-  await state.updateTask(id, task)
+const updateTask = async (id: number | undefined, task: Task) => {
+  if (id) {
+    task.done = !task.done
+    await state.updateTask(id, task)
+  }
 }
 
 try {
   await state.getTasks()
-} catch (e) {
-  error.value = e
+} catch {
+  error.value = 'Error getting tasks'
 }
 </script>
 

@@ -15,19 +15,13 @@ docker-compose up -d db
 
 VUE build included thanks to - https://quarkify.net/build-run-and-deploy-vuejs-app-with-quarkus/
 
-When develop, you start your app by issuing:
-
-```
-./mvnw exec:exec@npm-watch quarkus:dev
-```
-
-you can also start project as two separate backend:
+You should start project in two separate consoles. Backend:
 
 ```bash
 ./mvnw quarkus:dev
 ```
 
-and frontend in separate console:
+and frontend:
 
 ```bash
 cd webapp
