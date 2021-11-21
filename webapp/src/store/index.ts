@@ -45,7 +45,7 @@ export class State {
       const index = this.tasks.findIndex((t: Task) => {
         return t.id === respobject.id
       })
-      this.tasks[ index ] = respobject
+      this.tasks[index] = respobject
     } catch {
       this.error = 'Error updating task'
     }

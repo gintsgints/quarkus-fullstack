@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, defineProps } from 'vue'
 import { useState } from '../store'
-import Tasks from './components/Tasks.vue'
+import Tasks from '@/components/Tasks.vue'
 
 const taskname = ref('')
 const state = useState()

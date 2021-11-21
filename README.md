@@ -31,7 +31,7 @@ and frontend in separate console:
 
 ```bash
 cd webapp
-npm run serve
+npm run dev
 ```
 
 ## Packaging and running the application
