@@ -1,3 +1,22 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useState, Task } from '../store'
+
+const error = ref(null)
+const state = useState()
+
+const updateTask = async (id: number, task: Task) => {
+  task.done = !task.done
+  await state.updateTask(id, task)
+}
+
+try {
+  await state.getTasks()
+} catch (e) {
+  error.value = e
+}
+</script>
+
 <template>
   <div class="grid">
     <div v-for="task in state.tasks" v-bind:key="task.id">
@@ -11,36 +30,6 @@
     <div v-if="error">{{ error }}</div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { useState, Task } from '../store'
-
-export default defineComponent({
-  async setup() {
-    const error = ref(null)
-    const state = useState()
-
-    const updateTask = async(id: number, task: Task) => {
-      task.done = !task.done
-      await state.updateTask(id, task)
-    }
-
-    try {
-      await state.getTasks()
-    } catch (e) {
-      error.value = e
-    }
-
-    return {
-      error,
-      state,
-      updateTask
-    }
-  },
-  name: 'Tasks'
-})
-</script>
 
 <style scoped>
 .grid {

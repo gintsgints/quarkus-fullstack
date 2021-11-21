@@ -1,3 +1,14 @@
+<script>
+import Navbar from '@/components/Navbar.vue'
+
+export default {
+  name: 'App',
+  components: {
+    Navbar
+  }
+}
+</script>
+
 <template>
   <div id="app" class="wrapper">
     <header class="main-head"></header>
@@ -12,17 +23,6 @@
     <footer class="main-footer">© Techwares.eu</footer>
   </div>
 </template>
-
-<script>
-import Navbar from '@/components/Navbar.vue'
-
-export default {
-  name: 'App',
-  components: {
-    Navbar
-  }
-}
-</script>
 
 <style>
 #app {

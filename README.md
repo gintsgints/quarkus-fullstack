@@ -24,7 +24,7 @@ When develop, you start your app by issuing:
 you can also start project as two separate backend:
 
 ```bash
-./mnw quarkus:dev
+./mvnw quarkus:dev
 ```
 
 and frontend in separate console:

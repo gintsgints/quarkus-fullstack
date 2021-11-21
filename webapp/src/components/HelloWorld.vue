@@ -1,3 +1,27 @@
+<script setup lang="ts">
+import { ref, defineProps } from 'vue'
+import { useState } from '../store'
+import Tasks from './components/Tasks.vue'
+
+const taskname = ref('')
+const state = useState()
+
+const addTask = () => {
+  if (taskname.value.length > 0) {
+    state.addTask({
+      name: taskname.value,
+      due: new Date(),
+      done: false
+    })
+    taskname.value = ''
+  }
+}
+const clearTasks = () => {
+  state.clearTasks()
+}
+
+defineProps<{ msg: string }>()
+</script>
 <template>
   <div @keyup.enter="addTask">
     <h1>{{ msg }}</h1>
@@ -17,45 +41,6 @@
     <div v-if="state.loading" class="lds-hourglass"></div>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent, ref, defineAsyncComponent } from 'vue'
-import { useState } from '../store'
-
-const Tasks = defineAsyncComponent(() =>
-  import('@/components/Tasks.vue' /* webpackChunkName: "tasks" */)
-)
-
-export default defineComponent({
-  setup() {
-    const taskname = ref('')
-    const state = useState()
-
-    const addTask = () => {
-      if (taskname.value.length > 0) {
-        state.addTask({
-          name: taskname.value,
-          due: new Date(),
-          done: false
-        })
-        taskname.value = ''
-      }
-    }
-    const clearTasks = () => {
-      state.clearTasks()
-    }
-
-    return { state, taskname, addTask, clearTasks }
-  },
-  name: 'HelloWorld',
-  components: {
-    Tasks
-  },
-  props: {
-    msg: String
-  }
-})
-</script>
 
 <style scoped>
 .error {
