@@ -25,8 +25,8 @@ defineProps<{ msg: string }>()
 <template>
   <div @keyup.enter="addTask">
     <h1>{{ msg }}</h1>
-    <h4 v-if="state.error" class="error">
-      Data connection problem: {{ state.error }}
+    <h4 v-if="state.getError" class="error">
+      Data connection problem: {{ state.getError }}
     </h4>
     <input v-model="taskname" type="text" placeholder="Write task to add" />
     <button :disabled="taskname.length === 0" @click="addTask">Add task</button>
@@ -38,7 +38,7 @@ defineProps<{ msg: string }>()
         <Tasks />
       </template>
     </Suspense>
-    <div v-if="state.loading" class="lds-hourglass"></div>
+    <div v-if="state.getLoading" class="lds-hourglass"></div>
   </div>
 </template>
 

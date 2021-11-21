@@ -8,10 +8,22 @@ export type Task = {
 }
 
 export class State {
-  loading = false
-  loaded = false
-  error = ''
+  private loading = false
+  private loaded = false
+  private error = ''
   tasks: Array<Task> = []
+
+  get getLoading() {
+    return this.loading
+  }
+
+  get getLoaded() {
+    return this.loaded
+  }
+
+  get getError() {
+    return this.error
+  }
 
   async getTasks() {
     if (!this.loaded) {
