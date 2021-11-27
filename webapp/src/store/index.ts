@@ -11,7 +11,20 @@ export class State {
   private loading = false
   private loaded = false
   private error = ''
-  private tasks: Array<Task> = []
+  tasks: Array<Task> = []
+
+  get getLoading() {
+    return this.loading
+  }
+
+  get getLoaded() {
+    return this.loaded
+  }
+
+  get getError() {
+    return this.error
+  }
+
   async getTasks() {
     if (!this.loaded) {
       this.loading = true
@@ -23,8 +36,8 @@ export class State {
         const respobject = await response.json()
         this.tasks = respobject
         this.loaded = true
-      } catch (error) {
-        this.error = error
+      } catch {
+        this.error = 'Error getting tasks'
       }
       this.loading = false
     }
@@ -45,9 +58,9 @@ export class State {
       const index = this.tasks.findIndex((t: Task) => {
         return t.id === respobject.id
       })
-      this.tasks[ index ] = respobject
-    } catch (error) {
-      this.error = error
+      this.tasks[index] = respobject
+    } catch {
+      this.error = 'Error updating task'
     }
     this.loading = false
   }
@@ -65,8 +78,8 @@ export class State {
       }
       const respobject = await response.json()
       this.tasks.push(respobject)
-    } catch (error) {
-      this.error = error
+    } catch {
+      this.error = 'Error adding task'
     }
     this.loading = false
   }
@@ -84,8 +97,8 @@ export class State {
       }
       const respobject = await response.json()
       this.tasks = respobject
-    } catch (error) {
-      this.error = error
+    } catch {
+      this.error = 'Error cleaning tasks'
     }
     this.loading = false
   }
@@ -97,7 +110,4 @@ export const createState = () => {
 }
 
 export const useState = () => inject(stateSymbol) as State
-export const provideState = () => provide(
-  stateSymbol,
-  createState()
-)
+export const provideState = () => provide(stateSymbol, createState())
