@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineProps } from 'vue'
+import { ref } from 'vue'
 import { useState } from '../store'
 import Tasks from '@/components/Tasks.vue'
 
@@ -25,9 +25,7 @@ defineProps<{ msg: string }>()
 <template>
   <div @keyup.enter="addTask">
     <h1>{{ msg }}</h1>
-    <h4 v-if="state.getError" class="error">
-      Data connection problem: {{ state.getError }}
-    </h4>
+    <h4 v-if="state.getError" class="error">Data connection problem: {{ state.getError }}</h4>
     <input v-model="taskname" type="text" placeholder="Write task to add" />
     <button :disabled="taskname.length === 0" @click="addTask">Add task</button>
     <div>
