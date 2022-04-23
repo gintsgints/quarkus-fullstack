@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useState } from '../store'
 import Tasks from '@/components/Tasks.vue'
+import { useStore } from '@/stores/tasks'
 
 const taskname = ref('')
-const state = useState()
+const tasks = useStore()
 
 const addTask = () => {
   if (taskname.value.length > 0) {
-    state.addTask({
+    tasks.addTask({
       name: taskname.value,
       due: new Date(),
       done: false
@@ -17,7 +17,7 @@ const addTask = () => {
   }
 }
 const clearTasks = () => {
-  state.clearTasks()
+  tasks.clearTasks()
 }
 
 defineProps<{ msg: string }>()
@@ -25,7 +25,7 @@ defineProps<{ msg: string }>()
 <template>
   <div @keyup.enter="addTask">
     <h1>{{ msg }}</h1>
-    <h4 v-if="state.getError" class="error">Data connection problem: {{ state.getError }}</h4>
+    <h4 v-if="tasks.error" class="error">Data connection problem: {{ tasks.error }}</h4>
     <input v-model="taskname" type="text" placeholder="Write task to add" />
     <button :disabled="taskname.length === 0" @click="addTask">Add task</button>
     <div>
@@ -36,7 +36,7 @@ defineProps<{ msg: string }>()
         <Tasks />
       </template>
     </Suspense>
-    <div v-if="state.getLoading" class="lds-hourglass"></div>
+    <div v-if="tasks.loading" class="lds-hourglass"></div>
   </div>
 </template>
 

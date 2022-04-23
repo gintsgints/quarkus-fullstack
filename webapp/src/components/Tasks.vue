@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useState, Task } from '../store'
+import { useStore, Task } from '@/stores/tasks'
 
+const tasks = useStore()
 const error = ref('')
-const state = useState()
 
 const updateTask = async (id: number | undefined, task: Task) => {
   if (id) {
     task.done = !task.done
-    await state.updateTask(id, task)
+    await tasks.updateTask(id, task)
   }
 }
 
 try {
-  await state.getTasks()
+  await tasks.getTasks()
 } catch {
   error.value = 'Error getting tasks'
 }
@@ -21,12 +21,8 @@ try {
 
 <template>
   <div class="grid">
-    <div v-for="task in state.tasks" v-bind:key="task.id">
-      <input
-        @click="updateTask(task.id, task)"
-        v-model="task.done"
-        type="checkbox"
-      />
+    <div v-for="task in tasks.tasks" v-bind:key="task.id">
+      <input @click="updateTask(task.id, task)" v-model="task.done" type="checkbox" />
       {{ task.name }}
     </div>
     <div v-if="error">{{ error }}</div>

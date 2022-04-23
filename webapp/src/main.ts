@@ -1,9 +1,9 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import { stateSymbol, createState } from './store'
+import { createPinia } from 'pinia'
 
 createApp(App)
-  .provide(stateSymbol, createState())
   .use(router)
+  .use(createPinia())
   .mount('#app')
